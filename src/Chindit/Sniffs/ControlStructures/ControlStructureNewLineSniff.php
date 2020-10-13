@@ -46,12 +46,14 @@ class ControlStructureNewLineSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$error = 'Brace must be on a new line';
+		$ifError = 'Condition keyword must be on a new line';
 
 		if (in_array($tokens[$stackPtr]['code'], [T_IF, T_ELSEIF, T_ELSE], true)) {
 			$curlyBrace  = $tokens[$stackPtr]['scope_opener'];
 			$lastContent = $phpcsFile->findPrevious(T_WHITESPACE, ($curlyBrace - 1), $stackPtr, true);
 			$classLine   = $tokens[$lastContent]['line'];
 			$braceLine   = $tokens[$curlyBrace]['line'];
+
 			if ($classLine !== ($braceLine-1)) {
 				$fix = $phpcsFile->addFixableError($error, $stackPtr, 'BraceOnNewLine');
 				if ($fix === true) {
@@ -62,6 +64,21 @@ class ControlStructureNewLineSniff implements Sniff
 
 					$phpcsFile->fixer->replaceToken($curlyBrace, str_repeat('	', $tokens[$stackPtr]['level']) . '{');
 					$phpcsFile->fixer->addNewlineBefore($curlyBrace);
+					$phpcsFile->fixer->endChangeset();
+				}
+			}
+		}
+
+		if (in_array($tokens[$stackPtr]['code'], [T_ELSEIF, T_ELSE], true)) {
+			$lastBracket = $phpcsFile->findPrevious(T_CLOSE_CURLY_BRACKET, $tokens[$stackPtr]['scope_opener']+1);
+
+			if ($tokens[$lastBracket]['line'] === $tokens[$stackPtr]['line']) {
+				$fix = $phpcsFile->addFixableError($ifError, $stackPtr, 'KeywordOnLineAfterBrace');
+				if ($fix === true) {
+					$phpcsFile->fixer->beginChangeset();
+
+					$phpcsFile->fixer->replaceToken($stackPtr, str_repeat('	', $tokens[$stackPtr]['level']) . $tokens[$stackPtr]['content']);
+					$phpcsFile->fixer->addNewline($lastBracket);
 					$phpcsFile->fixer->endChangeset();
 				}
 			}
