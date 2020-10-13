@@ -18,7 +18,7 @@ class AvoidEmptyStatementSniff implements Sniff
 	{
 		$tokens = $phpcsFile->getTokens();
 
-		if ($tokens[$stackPtr - 1]['code'] === T_SEMICOLON)
+		if ($tokens[$stackPtr - 1]['code'] === T_SEMICOLON || ($tokens[$stackPtr - 2]['code'] === T_SEMICOLON && $tokens[$stackPtr -1]['code'] === T_WHITESPACE))
 		{
 			$error = 'Empty statement found';
 			$fix = $phpcsFile->addFixableError($error, $stackPtr, 'EmptyStatement');
