@@ -1,0 +1,27 @@
+{
+    "name": "chindit/phpcs-extra",
+    "description": "Extra rules for PHPCS",
+    "require": {
+        "php": "^7.1",
+        "squizlabs/php_codesniffer": "^3.2.3"
+    },
+    "license": "GPLv3",
+    "authors": [
+        {
+            "name": "David Lumaye",
+            "email": "littletiger58@gmail.com"
+        }
+    ],
+    "psr-4": {
+        "App\\": "app/",
+        "Chindit\\": "src/Chindit/"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Chindit\\Tests\\": "tests"
+        },
+        "classmap": [
+            "vendor/squizlabs/php_codesniffer"
+        ]
+    },
+}
