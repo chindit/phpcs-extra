@@ -23,5 +23,5 @@
         "classmap": [
             "vendor/squizlabs/php_codesniffer"
         ]
-    },
+    }
 }
