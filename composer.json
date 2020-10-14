@@ -5,16 +5,18 @@
         "php": "^7.1",
         "squizlabs/php_codesniffer": "^3.2.3"
     },
-    "license": "GPLv3",
+    "license": "GPL-3.0-or-later",
     "authors": [
         {
             "name": "David Lumaye",
             "email": "littletiger58@gmail.com"
         }
     ],
-    "psr-4": {
-        "App\\": "app/",
-        "Chindit\\": "src/Chindit/"
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Chindit\\": "src/Chindit/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
