@@ -49,7 +49,12 @@ class ControlStructureNewLineSniff implements Sniff
 		$ifError = 'Condition keyword must be on a new line';
 
 		if (in_array($tokens[$stackPtr]['code'], [T_IF, T_ELSEIF, T_ELSE], true)) {
-			$curlyBrace  = $tokens[$stackPtr]['scope_opener'];
+			try {
+                		$curlyBrace = $tokens[$stackPtr]['scope_opener'];
+            		} catch (\Throwable $t) {
+                		$phpcsFile->addError('«else if» structures are not allowed', $stackPtr, 'ElseIfOnBraceCheck');
+                		return;
+            		}
 			$lastContent = $phpcsFile->findPrevious(T_WHITESPACE, ($curlyBrace - 1), $stackPtr, true);
 			$classLine   = $tokens[$lastContent]['line'];
 			$braceLine   = $tokens[$curlyBrace]['line'];
