@@ -2,8 +2,8 @@
     "name": "chindit/phpcs-extra",
     "description": "Extra rules for PHPCS",
     "require": {
-        "php": "^7.3 || ^8.0",
-        "squizlabs/php_codesniffer": "^3.6.1"
+        "php": "^8.1",
+        "phpcsstandards/php_codesniffer": "^3.6.1"
     },
     "license": "GPL-3.0-or-later",
     "authors": [
@@ -23,7 +23,7 @@
             "Chindit\\Tests\\": "tests"
         },
         "classmap": [
-            "vendor/squizlabs/php_codesniffer"
+            "vendor/phpcsstandards/php_codesniffer"
         ]
     }
 }
