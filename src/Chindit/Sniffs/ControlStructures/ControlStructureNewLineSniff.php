@@ -65,7 +65,7 @@ class ControlStructureNewLineSniff implements Sniff
 				$catchKeyword = $tokens[$catchKeywordPosition];
 
 				if ($closingBrace['line'] !== $catchKeyword['line'] - 1) {
-					$fix = $phpcsFile->addFixableError($catchError, $stackPtr, 'CatchOnNewLine');
+					$fix = $phpcsFile->addFixableError($catchError, $catchKeywordPosition, 'CatchOnNewLine');
 					if ($fix === true) {
 						$phpcsFile->fixer->beginChangeset();
 						if ($tokens[($catchKeywordPosition - 1)]['code'] === T_WHITESPACE) {
