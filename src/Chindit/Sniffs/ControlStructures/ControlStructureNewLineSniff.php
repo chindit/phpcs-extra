@@ -27,6 +27,9 @@ class ControlStructureNewLineSniff implements Sniff
 			T_IF,
 			T_ELSE,
 			T_ELSEIF,
+			T_TRY,
+			T_CATCH,
+			T_SWITCH,
 		];
 
 	}//end register()
@@ -46,15 +49,34 @@ class ControlStructureNewLineSniff implements Sniff
 		$tokens = $phpcsFile->getTokens();
 
 		$error = 'Brace must be on a new line';
+		$catchError = 'Catch keyword must be on a new line';
 		$ifError = 'Condition keyword must be on a new line';
 
-		if (in_array($tokens[$stackPtr]['code'], [T_IF, T_ELSEIF, T_ELSE, T_SWITCH, T_TRY, T_CATCH], true)) {
+		if (in_array($tokens[$stackPtr]['code'], [T_IF, T_ELSEIF, T_ELSE, T_SWITCH, T_SWITCH, T_TRY, T_CATCH], true)) {
 			try {
-                		$curlyBrace = $tokens[$stackPtr]['scope_opener'];
-            		} catch (\Throwable $t) {
-                		$phpcsFile->addError('«else if» structures are not allowed', $stackPtr, 'ElseIfOnBraceCheck');
-                		return;
-            		}
+				$curlyBrace = $tokens[$stackPtr]['scope_opener'];
+			} catch (\Throwable $t) {
+				$phpcsFile->addError('«else if» structures are not allowed', $stackPtr, 'ElseIfOnBraceCheck');
+				return;
+			}
+			if ($tokens[$stackPtr]['code'] === T_TRY) {
+				$closingBrace = $tokens[$tokens[$stackPtr]['scope_closer']];
+				$catchKeywordPosition = $phpcsFile->findNext(T_CATCH, $stackPtr, $tokens[$tokens[$stackPtr]['scope_closer']]);
+				$catchKeyword = $tokens[$catchKeywordPosition];
+
+				if ($closingBrace['line'] !== $catchKeyword['line'] - 1) {
+					$fix = $phpcsFile->addFixableError($catchError, $stackPtr, 'CatchOnNewLine');
+					if ($fix === true) {
+						$phpcsFile->fixer->beginChangeset();
+						if ($tokens[($catchKeywordPosition - 1)]['code'] === T_WHITESPACE) {
+							$phpcsFile->fixer->replaceToken(($catchKeywordPosition - 1), '');
+						}
+						$phpcsFile->fixer->addNewlineBefore($catchKeywordPosition - 1);
+						$phpcsFile->fixer->replaceToken($catchKeywordPosition, str_repeat('	', $tokens[$stackPtr]['level']) . 'catch');
+						$phpcsFile->fixer->endChangeset();
+					}
+				}
+			}
 			$lastContent = $phpcsFile->findPrevious(T_WHITESPACE, ($curlyBrace - 1), $stackPtr, true);
 			$classLine   = $tokens[$lastContent]['line'];
 			$braceLine   = $tokens[$curlyBrace]['line'];
