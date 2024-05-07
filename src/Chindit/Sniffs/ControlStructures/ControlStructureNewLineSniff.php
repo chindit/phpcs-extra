@@ -48,7 +48,7 @@ class ControlStructureNewLineSniff implements Sniff
 		$error = 'Brace must be on a new line';
 		$ifError = 'Condition keyword must be on a new line';
 
-		if (in_array($tokens[$stackPtr]['code'], [T_IF, T_ELSEIF, T_ELSE], true)) {
+		if (in_array($tokens[$stackPtr]['code'], [T_IF, T_ELSEIF, T_ELSE, T_SWITCH, T_TRY, T_CATCH], true)) {
 			try {
                 		$curlyBrace = $tokens[$stackPtr]['scope_opener'];
             		} catch (\Throwable $t) {
