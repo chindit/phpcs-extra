@@ -92,7 +92,8 @@ class ControlStructureNewLineSniff implements Sniff
 						$phpcsFile->fixer->replaceToken(($curlyBrace - 1), '');
 					}
 
-					$phpcsFile->fixer->replaceToken($curlyBrace, str_repeat('	', $tokens[$stackPtr]['level']) . '{');
+					$level = ceil(($tokens[$stackPtr]['column'] - 1)/4);
+					$phpcsFile->fixer->replaceToken($curlyBrace, str_repeat('	', $level) . '{');
 					$phpcsFile->fixer->addNewlineBefore($curlyBrace);
 					$phpcsFile->fixer->endChangeset();
 				}
