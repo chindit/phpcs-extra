@@ -61,10 +61,13 @@ class ControlStructureNewLineSniff implements Sniff
 			}
 			if ($tokens[$stackPtr]['code'] === T_TRY) {
 				$closingBrace = $tokens[$tokens[$stackPtr]['scope_closer']];
-				$catchKeywordPosition = $phpcsFile->findNext(T_CATCH, $stackPtr, $tokens[$tokens[$stackPtr]['scope_closer']]);
+				$catchKeywordPosition = $phpcsFile->findNext(T_CATCH, $tokens[$stackPtr]['scope_closer']);
+				if ($catchKeywordPosition === false) {
+					return;
+				}
 				$catchKeyword = $tokens[$catchKeywordPosition];
 
-				if ($closingBrace['line'] !== $catchKeyword['line'] - 1) {
+				if ($closingBrace['line'] === $catchKeyword['line']) {
 					$fix = $phpcsFile->addFixableError($catchError, $catchKeywordPosition, 'CatchOnNewLine');
 					if ($fix === true) {
 						$phpcsFile->fixer->beginChangeset();
