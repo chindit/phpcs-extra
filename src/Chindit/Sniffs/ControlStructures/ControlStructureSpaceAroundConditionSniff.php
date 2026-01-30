@@ -2,8 +2,8 @@
 
 namespace Chindit\Sniffs\ControlStructures;
 
-use PHPCSStandards\PHP_CodeSniffer\Files\File;
-use PHPCSStandards\PHP_CodeSniffer\Sniffs\Sniff;
+use PHP_CodeSniffer\Files\File;
+use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ControlStructureSpaceAroundConditionSniff implements Sniff
 {
