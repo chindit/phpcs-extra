@@ -2,19 +2,20 @@
 
 namespace Chindit\Sniffs\CodeAnalysis;
 
-use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer\Sniffs\Sniff;
+
+use PHPCSStandards\PHP_CodeSniffer\Files\File;
+use PHPCSStandards\PHP_CodeSniffer\Sniffs\Sniff;
 
 class AvoidEmptyStatementSniff implements Sniff
 {
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_SEMICOLON
 		];
 	}
 
-	public function process(File $phpcsFile, $stackPtr)
+	public function process(File $phpcsFile, int $stackPtr): void
 	{
 		$tokens = $phpcsFile->getTokens();
 

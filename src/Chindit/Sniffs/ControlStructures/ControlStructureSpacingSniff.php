@@ -36,7 +36,7 @@ class ControlStructureSpacingSniff implements Sniff
 	 *
 	 * @return array
 	 */
-	public function register()
+	public function register(): array
 	{
 		return [
 			T_IF,
@@ -55,13 +55,13 @@ class ControlStructureSpacingSniff implements Sniff
 	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
-	 * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+	 * @param File $phpcsFile The file being scanned.
 	 * @param int                         $stackPtr  The position of the current token
 	 *                                               in the stack passed in $tokens.
 	 *
 	 * @return void
 	 */
-	public function process(File $phpcsFile, $stackPtr)
+	public function process(File $phpcsFile, int $stackPtr): void
 	{
 		$this->requiredSpacesAfterOpen   = (int) $this->requiredSpacesAfterOpen;
 		$this->requiredSpacesBeforeClose = (int) $this->requiredSpacesBeforeClose;
@@ -76,7 +76,7 @@ class ControlStructureSpacingSniff implements Sniff
 		$parenOpener = $tokens[$stackPtr]['parenthesis_opener'];
 		$parenCloser = $tokens[$stackPtr]['parenthesis_closer'];
 		$nextContent = $phpcsFile->findNext(T_WHITESPACE, ($parenOpener + 1), null, true);
-		if (in_array($tokens[$nextContent]['code'], Tokens::$commentTokens, true) === false) {
+		if (in_array($tokens[$nextContent]['code'], Tokens::COMMENT_TOKENS, true) === false) {
 			$spaceAfterOpen = 0;
 			if ($tokens[($parenOpener + 1)]['code'] === T_WHITESPACE) {
 				if (strpos($tokens[($parenOpener + 1)]['content'], $phpcsFile->eolChar) !== false) {
