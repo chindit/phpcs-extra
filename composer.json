@@ -1,6 +1,7 @@
 {
     "name": "chindit/phpcs-extra",
     "description": "Extra rules for PHPCS",
+    "type": "phpcodesniffer-standard",
     "require": {
         "php": "^8.1",
         "squizlabs/php_codesniffer": "^4.0"
